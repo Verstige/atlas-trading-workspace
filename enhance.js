@@ -700,6 +700,7 @@ $$('#layout [data-layout]').forEach((button) => {
     paneCount = Number(button.dataset.layout);
     $$('#layout [data-layout]').forEach((b) => b.classList.toggle('active', b === button));
     buildPanes();
+    fillCanvas();
   });
 });
 if ($('.canvas-wrap')) new ResizeObserver(updatePanes).observe($('.canvas-wrap'));
@@ -789,4 +790,111 @@ document.querySelectorAll('dialog').forEach((dialog) => {
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
 }
+
+/* ================================================================== *
+ * Mobile chart-first dock — move real panels in and out of a sheet so
+ * every existing event handler stays attached to its original element.
+ * ================================================================== */
+const SHEET_TARGETS = {
+  tools: '.tools',
+  trade: '.quote-buttons',
+  markets: 'aside',
+  account: '.bottom-panel',
+};
+const dock = $('#mobile-dock');
+const sheet = $('#mobile-sheet');
+const sheetBody = $('#sheet-body');
+const sheetBackdrop = $('#sheet-backdrop');
+const mobileQuery = matchMedia('(max-width:680px)');
+const sheetOrigins = new Map();
+let activeSheet = null;
+
+function closeSheet() {
+  if (!activeSheet) return;
+  const element = $(SHEET_TARGETS[activeSheet]);
+  const origin = sheetOrigins.get(element);
+  if (element && origin) {
+    origin.parent.insertBefore(element, origin.next);
+    sheetOrigins.delete(element);
+  }
+  sheetBody.querySelectorAll('[data-sheet-note]').forEach((note) => note.remove());
+  sheet.classList.remove('open');
+  sheet.setAttribute('aria-hidden', 'true');
+  sheetBackdrop.hidden = true;
+  $$('#mobile-dock button').forEach((button) => {
+    button.classList.remove('active');
+    button.setAttribute('aria-expanded', 'false');
+  });
+  activeSheet = null;
+}
+
+function openSheet(name) {
+  if (!mobileQuery.matches || !SHEET_TARGETS[name]) return;
+  if (activeSheet === name) { closeSheet(); return; }
+  closeSheet();
+
+  const element = $(SHEET_TARGETS[name]);
+  if (!element) return;
+  sheetOrigins.set(element, { parent: element.parentElement, next: element.nextSibling });
+
+  if (name === 'trade') {
+    const note = document.createElement('p');
+    note.className = 'muted dialog-note sheet-note';
+    note.dataset.sheetNote = '1';
+    note.textContent = 'Paper orders · simulated execution';
+    sheetBody.appendChild(note);
+  }
+  sheetBody.appendChild(element);
+
+  sheet.classList.add('open');
+  sheet.setAttribute('aria-hidden', 'false');
+  sheetBackdrop.hidden = false;
+  $$('#mobile-dock button').forEach((button) => {
+    const on = button.dataset.sheet === name;
+    button.classList.toggle('active', on);
+    button.setAttribute('aria-expanded', String(on));
+  });
+  activeSheet = name;
+}
+
+dock?.addEventListener('click', (e) => {
+  const button = e.target.closest('[data-sheet]');
+  if (button) openSheet(button.dataset.sheet);
+});
+sheetBackdrop?.addEventListener('click', closeSheet);
+$('#sheet-close')?.addEventListener('click', closeSheet);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && activeSheet) closeSheet(); }, true);
+
+const onBreakpoint = (e) => { if (!e.matches) closeSheet(); };
+if (mobileQuery.addEventListener) mobileQuery.addEventListener('change', onBreakpoint);
+else mobileQuery.addListener(onBreakpoint);
+
+/* Percentage canvas height cannot resolve through the mobile flex chain;
+   assign the measured height directly and let app.js redraw into it. */
+function fillCanvas() {
+  const wrap = $('.canvas-wrap');
+  const canvas = $('#chart');
+  if (!wrap || !canvas || !mobileQuery.matches) return;
+  const rows = wrap.classList.contains('multi-4') ? 2 : 1;
+  const height = Math.max(80, Math.round(wrap.clientHeight / rows));
+  if (canvas.style.height !== height + 'px') {
+    canvas.style.height = height + 'px';
+    A.draw();
+  }
+  paneCanvases.forEach((pane) => {
+    const paneHeight = Math.round(pane.parentElement.clientHeight);
+    if (paneHeight > 0 && pane.style.height !== paneHeight + 'px') pane.style.height = paneHeight + 'px';
+  });
+}
+if ($('.canvas-wrap')) new ResizeObserver(fillCanvas).observe($('.canvas-wrap'));
+fillCanvas();
+
+const onResizeBreakpoint = (e) => {
+  if (!e.matches && $('#chart')) $('#chart').style.height = '';
+  else fillCanvas();
+};
+if (mobileQuery.addEventListener) mobileQuery.addEventListener('change', onResizeBreakpoint);
+else mobileQuery.addListener(onResizeBreakpoint);
+
+
 

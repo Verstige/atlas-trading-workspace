@@ -313,6 +313,31 @@
     <div class="tour-footer"><span id="tour-step" class="muted"></span><button id="tour-next" class="primary">Next</button></div>
   </dialog>
 
+  <!-- Mobile chart-first dock: panels move in here on small screens -->
+  <nav class="mobile-dock" id="mobile-dock" aria-label="Chart panels">
+    <button data-sheet="tools" aria-expanded="false" aria-label="Drawing tools">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m4 20 4.5-1 10-10a2.1 2.1 0 0 0-3-3l-10 10z"/><path d="m14 6 4 4"/></svg>
+      <span>Tools</span>
+    </button>
+    <button data-sheet="trade" aria-expanded="false" aria-label="Buy and sell">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16m0 0-3-3m3 3-3 3M20 16H4m0 0 3-3m-3 3 3 3"/></svg>
+      <span>Trade</span>
+    </button>
+    <button data-sheet="markets" aria-expanded="false" aria-label="Watchlist">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      <span>Markets</span>
+    </button>
+    <button data-sheet="account" aria-expanded="false" aria-label="Paper trading account">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>
+      <span>Account</span>
+    </button>
+  </nav>
+  <div class="sheet-backdrop" id="sheet-backdrop" hidden></div>
+  <section class="mobile-sheet" id="mobile-sheet" aria-hidden="true" aria-label="Chart panel">
+    <button class="sheet-handle" id="sheet-close" aria-label="Minimize panel"><span></span></button>
+    <div class="sheet-body" id="sheet-body"></div>
+  </section>
+
   <div id="toast" role="status"></div>
 
   <script type="module" src="/app.js"></script>

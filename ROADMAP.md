@@ -38,6 +38,15 @@ Prioritized by impact on the experience, not by implementation novelty. **Tier 1
 - **PWA install** with an offline shell and cached assets, so the phone link behaves like an app.
 - **E2E smoke suite** covering symbol switch, order flow, dialogs and responsive breakpoints.
 
+## Mobile chart-first layout (shipped)
+
+Phone screens now give the chart the full viewport. The drawing rail, buy/sell ticket,
+watchlist and paper-trading panel move into a collapsible bottom dock (Tools / Trade /
+Markets / Account), following the compact bottom-bar pattern in the TradingView
+reference. Panels are moved, not duplicated, so every event handler stays attached.
+The canvas is sized from its measured container because percentage height cannot
+resolve through the mobile flex chain.
+
 ## Deliberately out of scope
 
 Real broker connectivity, real-time licensed market data, and extraction of TradingView's proprietary source. Everything here stays an independent simulated interface.

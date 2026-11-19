@@ -513,7 +513,7 @@ body.light #search-results strong{color:var(--text)}
   #timeframes button{min-width:32px;height:27px}
   #indicators span:not(.count){display:none}
   #indicators{padding:0 8px}
-  .chart-heading{padding:12px 14px 8px;flex-wrap:wrap}
+  .chart-heading{padding:9px 12px 5px;flex-wrap:wrap}
   .chart-id h1{font-size:12px}
   .ohlc{font-size:9px;gap:0}
   .quote-buttons{width:100%;justify-content:space-between}
@@ -538,4 +538,65 @@ body.light #search-results strong{color:var(--text)}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+/* ============================================================
+   Mobile chart-first layout
+   The chart owns the viewport; tools, trade ticket, watchlist
+   and account slide up from a collapsible bottom dock.
+   ============================================================ */
+.mobile-dock,.mobile-sheet,.sheet-backdrop{display:none}
+@media (max-width:680px){
+  body{overflow:hidden}
+  main{display:flex;flex-direction:column;min-height:0;padding:6px 8px 84px}
+  .workspace-main{flex:1;min-height:0;gap:5px}
+  .toolbar{flex-wrap:nowrap;overflow-x:auto;height:46px;min-height:46px;padding:0 8px;gap:6px;scrollbar-width:none}
+  .toolbar::-webkit-scrollbar{display:none}
+  .status{display:none}
+  .chart-footer{height:36px;min-height:36px}
+  .chart-panel{flex:1;min-height:0}
+  .quote-buttons{display:none}
+  .tools,.bottom-panel,aside{display:none}
+
+  .mobile-dock{
+    display:grid;grid-template-columns:repeat(4,1fr);position:fixed;
+    left:8px;right:8px;bottom:8px;height:58px;z-index:60;
+    border-radius:18px;overflow:hidden;
+    background:rgba(16,19,26,.93);backdrop-filter:blur(24px) saturate(160%);
+    -webkit-backdrop-filter:blur(24px) saturate(160%);
+    border:1px solid var(--glass-border);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 16px 40px -18px rgba(0,0,0,.9)
+  }
+  .mobile-dock button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    color:var(--muted);font-size:10px;border-radius:0;transition:color .2s var(--ease),background .2s var(--ease)}
+  .mobile-dock button svg{width:19px;height:19px}
+  .mobile-dock button:hover,.mobile-dock button.active{color:var(--accent);background:rgba(var(--accent-rgb),.1)}
+  .mobile-dock button.active{box-shadow:inset 0 2px 0 var(--accent)}
+
+  .sheet-backdrop{display:block;position:fixed;inset:0;z-index:55;
+    background:rgba(4,6,10,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+  .mobile-sheet{
+    display:block;position:fixed;left:8px;right:8px;bottom:74px;z-index:58;
+    max-height:64dvh;overflow:hidden;padding:0 12px 14px;border-radius:20px;
+    background:linear-gradient(160deg,rgba(23,27,37,.97),rgba(13,16,22,.97));
+    backdrop-filter:blur(30px) saturate(160%);-webkit-backdrop-filter:blur(30px) saturate(160%);
+    border:1px solid var(--glass-border);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 -12px 50px -22px rgba(0,0,0,.95);
+    transform:translateY(calc(100% + 96px));transition:transform .38s var(--ease)
+  }
+  .mobile-sheet.open{transform:translateY(0)}
+  .sheet-handle{display:block;width:100%;height:26px;padding:8px 0 4px}
+  .sheet-handle span{display:block;width:38px;height:4px;margin:auto;border-radius:4px;background:rgba(255,255,255,.24)}
+  .sheet-body{max-height:calc(64dvh - 42px);overflow:auto;overscroll-behavior:contain}
+  .sheet-note{margin:2px 0 8px;font-size:10px}
+
+  .mobile-sheet .tools{display:flex;width:100%;height:auto;flex-direction:row;justify-content:space-around;
+    padding:8px 2px;border:0;border-radius:0;background:none;box-shadow:none;backdrop-filter:none}
+  .mobile-sheet .tools .tool-spacer{display:none}
+  .mobile-sheet .quote-buttons{display:flex;padding:6px 0 4px}
+  .mobile-sheet .bottom-panel{display:flex;height:auto;max-height:52dvh;border:0;border-radius:0;
+    background:none;box-shadow:none;backdrop-filter:none}
+  .mobile-sheet aside{display:flex;overflow:auto;max-height:52dvh;padding:0}
+  .mobile-sheet .aside-bottom{display:none}
+  .mobile-sheet .news{max-height:none}
 }

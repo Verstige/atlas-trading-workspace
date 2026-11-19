@@ -32,6 +32,7 @@ Production: `npm run build`. Functional checks: `node scripts/check.mjs`.
 - 1/2/4 synchronized chart layouts, market wire, economic calendar and first-run tour.
 - Four saved accent themes, keyboard focus traps, skip link and an installable offline PWA.
 - `npm run smoke` verifies DOM hooks, PWA assets, syntax and trading math.
+- Mobile chart-first layout: full-height chart with a collapsible bottom dock for tools, trade ticket, markets and account.
 
 ## Design
 
