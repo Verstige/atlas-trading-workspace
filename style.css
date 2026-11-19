@@ -573,6 +573,7 @@ body.light #search-results strong{color:var(--text)}
   .mobile-dock button:hover,.mobile-dock button.active{color:var(--accent);background:rgba(var(--accent-rgb),.1)}
   .mobile-dock button.active{box-shadow:inset 0 2px 0 var(--accent)}
 
+  .sheet-backdrop[hidden]{display:none!important}
   .sheet-backdrop{display:block;position:fixed;inset:0;z-index:55;
     background:rgba(4,6,10,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
   .mobile-sheet{

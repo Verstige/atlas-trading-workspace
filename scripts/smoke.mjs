@@ -6,6 +6,8 @@ import assert from 'node:assert/strict';
 
 const read = (p) => readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
 const html = read('docs/index.html');
+const css = read('docs/' + html.match(/assets\/([\w-]+\.css)/)[0]);
+assert.ok(css.includes('.sheet-backdrop[hidden]{display:none!important}'), 'Backdrop hidden-state guard missing');
 
 for (const hook of [
   'id="chart"', 'id="watchlist"', 'id="positions"', 'id="order-dialog"',

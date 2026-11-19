@@ -1,5 +1,5 @@
 /* Atlas offline shell — network-first so a new deploy is never stuck behind a cache. */
-const CACHE = 'atlas-shell-v1';
+const CACHE = 'atlas-shell-v2';
 const CORE = ['./', './index.html', './manifest.webmanifest', './assets/icon.svg'];
 
 self.addEventListener('install', (event) => {
