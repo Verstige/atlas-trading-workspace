@@ -1,0 +1,14 @@
+{
+  "name": "Atlas Market Workspace",
+  "short_name": "Atlas",
+  "description": "Independent simulated charting and paper-trading workspace.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0A0C11",
+  "theme_color": "#0A0C11",
+  "icons": [
+    { "src": "./assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

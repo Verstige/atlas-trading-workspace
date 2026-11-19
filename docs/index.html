@@ -5,13 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0A0C11">
   <title>Atlas — Market workspace</title>
+  <link rel="manifest" href="./manifest.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="./assets/index-C2vsba1n.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-C5POjCk6.css">
+  <script type="module" crossorigin src="./assets/index-D6PtZiZZ.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CBEv5QG1.css">
 </head>
 <body>
+  <a class="skip-link" href="#chart">Skip to chart</a>
 
   <!-- Atmosphere: the refracting field that sits behind every glass surface -->
   <div class="aurora" aria-hidden="true">
@@ -35,6 +37,9 @@
 
     <div class="appbar-right">
       <span class="demo"><i></i> SIMULATED MARKET</span>
+      <button id="appearance" class="icon-btn" title="Change accent" aria-label="Change accent">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+      </button>
       <button id="shortcuts" class="icon-btn shortcut-key" title="Keyboard shortcuts" aria-label="Keyboard shortcuts">?</button>
       <button id="theme" class="icon-btn" title="Switch light / dark theme" aria-label="Switch theme">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
@@ -96,6 +101,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="8" cy="18" r="2" fill="currentColor" stroke="none"/></svg>
           <span>Indicators</span><span class="count">2</span>
         </button>
+        <div id="layout" class="layout-switch" aria-label="Chart layout"><button data-layout="1" class="active" title="Single chart">1</button><button data-layout="2" title="Two charts">2</button><button data-layout="4" title="Four charts">4</button></div>
         <button id="reset" class="icon-btn right" title="Reset view" aria-label="Reset view">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
         </button>
@@ -110,13 +116,14 @@
           </div>
           <div class="quote-buttons">
             <button id="sell" class="sell"><small>SELL</small><b></b></button>
-            <span class="spread">2.00</span>
+            <span class="spread"><small>SPREAD</small>2.00</span>
             <button id="buy" class="buy"><small>BUY</small><b></b></button>
           </div>
         </div>
         <div class="legend"><span id="sma-label">SMA 20 <b></b></span><span class="muted">Volume</span></div>
         <div class="canvas-wrap">
           <canvas id="chart" tabindex="0" aria-label="Interactive simulated price chart. Scroll to zoom, drag to pan; arrow keys pan, plus and minus zoom."></canvas>
+          <div class="pane-host" id="pane-host"></div>
           <div class="watermark">ATLAS<span>See the bigger picture.</span></div>
           <div id="tooltip"></div>
         </div>
@@ -125,7 +132,7 @@
             <button data-range="30">1M</button><button data-range="90">3M</button>
             <button data-range="160" class="active">6M</button><button data-range="260">1Y</button><button data-range="400">All</button>
           </div>
-          <div class="footer-right"><span class="clock-label">UTC <span id="clock"></span></span><button id="log">log</button><button id="auto" class="active">auto</button></div>
+          <div class="footer-right"><span class="clock-label">UTC <span id="clock"></span></span><button id="csv" title="Export visible OHLCV data as CSV">CSV</button><button id="log">log</button><button id="auto" class="active">auto</button></div>
         </footer>
       </section>
 
@@ -144,6 +151,8 @@
           <div><span>Exposure</span><b data-m="exposure">0%</b></div>
           <div><span>Positions</span><b data-m="positions">0</b></div>
         </div>
+        <div class="pending" id="pending" hidden></div>
+        <div class="pending" id="brackets" hidden></div>
         <div id="positions"></div>
       </section>
 
@@ -157,7 +166,7 @@
     <!-- Right rail -->
     <aside>
       <section class="watch-panel glass glass-edge">
-        <div class="aside-title"><h2>Watchlist</h2><button id="add-symbol" title="Add symbol" aria-label="Add symbol">
+        <div class="aside-title"><h2>Watchlist</h2><button id="manage-watch" class="text-btn" title="Manage watchlist">Manage</button><button id="add-symbol" title="Add symbol" aria-label="Add symbol">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
         </button></div>
         <div class="watch-head"><span>Symbol</span><span>Last</span><span>Chg%</span></div>
@@ -177,13 +186,27 @@
         <div class="stat"><span>Asset class</span><b id="asset-class"></b></div>
       </section>
 
-      <section class="insight glass">
-        <span class="eyebrow">YOUR MARKET, IN FOCUS</span>
-        <h3>A little perspective.<br>A better decision.</h3>
-        <p>Explore price action, compare markets, and test your ideas in a practice account.</p>
-        <span class="insight-link">Research. Refine. Repeat.
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
-        </span>
+      <section class="performance glass">
+        <span class="eyebrow">ACCOUNT PERFORMANCE</span>
+        <svg class="equity-chart" id="equity-chart" viewBox="0 0 240 52" preserveAspectRatio="none" aria-label="Equity curve">
+          <defs><linearGradient id="equity-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(110,150,255,.34)"/><stop offset="100%" stop-color="rgba(110,150,255,0)"/></linearGradient></defs>
+          <path id="equity-area" fill="url(#equity-fill)" d=""></path>
+          <polyline id="equity-line" fill="none" stroke="var(--accent)" stroke-width="1.6" points=""></polyline>
+        </svg>
+        <div class="perf-grid">
+          <div><span>Realized</span><b data-p="realized">$0.00</b></div>
+          <div><span>Win rate</span><b data-p="winrate">—</b></div>
+          <div><span>Profit factor</span><b data-p="pf">—</b></div>
+          <div><span>Closed trades</span><b data-p="trades">0</b></div>
+        </div>
+        <span class="perf-note">Simulated account · since inception</span>
+      </section>
+
+      <section class="news glass">
+        <div class="aside-title"><h2>Market wire</h2><span class="eyebrow">SIMULATED</span></div>
+        <div id="news-list"></div>
+        <span class="eyebrow news-cal-title">ECONOMIC CALENDAR</span>
+        <div id="calendar-list"></div>
       </section>
       <div class="aside-bottom">✦ Independent workspace</div>
     </aside>
@@ -213,9 +236,19 @@
     <div class="dialog-header"><h2 id="order-title"></h2><button data-close="order-dialog" class="icon-btn" aria-label="Close">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
     </button></div>
-    <p class="muted dialog-note">Paper market order · Simulated execution</p>
+    <p class="muted dialog-note">Paper order · Simulated execution</p>
+    <label class="field-label" for="order-type">Order type</label>
+    <select id="order-type" class="wide-select"><option value="market">Market</option><option value="limit">Limit</option><option value="stop">Stop</option></select>
     <label class="field-label" for="quantity">Quantity</label>
     <input id="quantity" type="number" min="0.001" step="0.001" value="1">
+    <div id="trigger-wrap" hidden>
+      <label class="field-label" for="trigger-price">Trigger price</label>
+      <input id="trigger-price" type="number" min="0.00001" step="0.01">
+    </div>
+    <div class="bracket-row">
+      <label><span>Stop loss</span><input id="stop-loss" type="number" step="0.01" placeholder="Optional"></label>
+      <label><span>Take profit</span><input id="take-profit" type="number" step="0.01" placeholder="Optional"></label>
+    </div>
     <p id="order-value"></p>
     <p id="order-error" class="negative"></p>
     <button id="place-order" class="primary">Place paper order</button>
@@ -233,8 +266,52 @@
       <span>Log scale / auto / reset</span><span><kbd>L</kbd> / <kbd>A</kbd> / <kbd>0</kbd></span>
       <span>Zoom chart</span><span><kbd>+</kbd> / <kbd>−</kbd> or pinch</span>
       <span>Pan chart</span><span><kbd>←</kbd> <kbd>→</kbd> or drag</span>
+      <span>Export OHLCV</span><span><kbd>E</kbd></span>
     </div>
     <p class="muted dialog-note">Shortcuts pause while you are typing in a field.</p>
+  </dialog>
+
+  <dialog id="alert-dialog" class="glass-dialog">
+    <div class="dialog-header"><h2>Price alert</h2><button data-close="alert-dialog" class="icon-btn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button></div>
+    <p class="muted dialog-note" id="alert-symbol"></p>
+    <label class="field-label" for="alert-direction">Notify me when price is</label>
+    <select id="alert-direction" class="wide-select"><option value="above">Above</option><option value="below">Below</option></select>
+    <label class="field-label" for="alert-price">Price</label>
+    <input id="alert-price" type="number" min="0.00001" step="0.01">
+    <button id="save-alert" class="primary">Create alert</button>
+    <div id="alert-list"></div>
+  </dialog>
+
+  <dialog id="accent-dialog" class="glass-dialog">
+    <div class="dialog-header"><h2>Appearance</h2><button data-close="accent-dialog" class="icon-btn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button></div>
+    <p class="muted dialog-note">One accent, four moods. Saved on this device.</p>
+    <div class="swatches" id="swatches">
+      <button data-accent="blue" class="active" style="--sw:#6E96FF" aria-label="Blue"></button>
+      <button data-accent="teal" style="--sw:#1FBFA0" aria-label="Teal"></button>
+      <button data-accent="amber" style="--sw:#E8A838" aria-label="Amber"></button>
+      <button data-accent="rose" style="--sw:#F0738B" aria-label="Rose"></button>
+    </div>
+  </dialog>
+
+  <dialog id="manage-dialog" class="glass-dialog">
+    <div class="dialog-header"><h2>Manage watchlist</h2><button data-close="manage-dialog" class="icon-btn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button></div>
+    <div id="manage-list"></div>
+    <p class="muted dialog-note">Add a symbol to this device</p>
+    <div class="add-symbol-row"><input id="new-symbol" placeholder="SYMBOL" maxlength="10"><input id="new-price" type="number" placeholder="Price" step="0.01"><button id="add-custom">Add</button></div>
+  </dialog>
+
+  <dialog id="tour-dialog" class="glass-dialog" data-tour>
+    <div class="dialog-header"><h2 id="tour-title"></h2><button data-close="tour-dialog" class="icon-btn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button></div>
+    <p id="tour-copy" class="tour-copy"></p>
+    <div class="tour-footer"><span id="tour-step" class="muted"></span><button id="tour-next" class="primary">Next</button></div>
   </dialog>
 
   <div id="toast" role="status"></div>

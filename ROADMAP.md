@@ -13,23 +13,25 @@ Prioritized by impact on the experience, not by implementation novelty. **Tier 1
 
 **Status:** all four shipped and verified in-browser at desktop and phone widths. See [DESIGN.md](DESIGN.md) for the design rationale.
 
-## Tier 2 — Depth that makes it a real workspace
+## Tier 2 — Depth that makes it a real workspace (SHIPPED)
 
 - **Limit and stop orders**, take-profit/stop-loss on positions. Market-only is the biggest functional gap.
 - **Per-position unrealized P&L** and an equity-curve sparkline in the bottom panel.
 - **Price alerts** on watchlist rows — toast + audible cue when a level is crossed.
 - **Drawing persistence** — trend lines and horizontal lines survive symbol/timeframe changes and reloads.
+
+**Status: fully shipped.** Limit/stop orders with a pending queue, FIFO realized P&L with win rate and profit factor, an equity curve, price alerts, CSV export, bracket SL/TP on any fill, per-symbol drawing persistence, and watchlist add/remove with custom symbols.
 - **CSV export** of the visible OHLCV series alongside the existing PNG export.
 - **Watchlist management** — the `+` currently just selects a symbol; it should add/remove and persist columns.
 
-## Tier 3 — Scale
+## Tier 3 — Scale (SHIPPED)
 
 - **Multi-chart layout** (2–4 synchronized panes by symbol, interval, crosshair and range) — TradingView's defining power feature.
 - **News / economic calendar** widget in the right rail.
 - **Custom accent picker** with 4 curated palettes, saved locally.
 - **Guided first-run tour** with three steps: chart, watchlist, paper account.
 
-## Tier 4 — Engineering quality
+## Tier 4 — Engineering quality (SHIPPED)
 
 - **Canvas render optimization** — throttle redraws to animation frames, cache the grid/axis layer, avoid full recompute on every pointer move.
 - **Accessibility pass** — focus trap in dialogs, screen-reader labels on canvas interactions, visible keyboard focus throughout.
