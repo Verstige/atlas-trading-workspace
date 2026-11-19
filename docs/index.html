@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="./assets/index-Bf78LYdF.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-CiS3F07o.css">
+  <script type="module" crossorigin src="./assets/index-C2vsba1n.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-C5POjCk6.css">
 </head>
 <body>
 
@@ -35,6 +35,7 @@
 
     <div class="appbar-right">
       <span class="demo"><i></i> SIMULATED MARKET</span>
+      <button id="shortcuts" class="icon-btn shortcut-key" title="Keyboard shortcuts" aria-label="Keyboard shortcuts">?</button>
       <button id="theme" class="icon-btn" title="Switch light / dark theme" aria-label="Switch theme">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.5 14.3A8.5 8.5 0 0 1 9.7 3.5a8.5 8.5 0 1 0 10.8 10.8Z"/>
@@ -75,6 +76,7 @@
         <button id="symbol" class="symbol-button" title="Search symbols">
           <span class="symbol-glyph" id="symbol-glyph">₿</span>
           <span class="symbol-copy"><strong>BTCUSD</strong><small>Bitcoin · Crypto</small></span>
+          <kbd class="kbd">⌘K</kbd>
           <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
         </button>
         <span class="divider"></span>
@@ -135,6 +137,12 @@
           <span class="tab-spacer"></span>
           <span class="balance-label muted">Practice balance</span>
           <strong id="balance">$100,000.00</strong>
+        </div>
+        <div class="metrics" id="metrics">
+          <div><span>Equity</span><b data-m="equity">$100,000.00</b></div>
+          <div><span>Unrealized</span><b data-m="unrealized">$0.00</b></div>
+          <div><span>Exposure</span><b data-m="exposure">0%</b></div>
+          <div><span>Positions</span><b data-m="positions">0</b></div>
         </div>
         <div id="positions"></div>
       </section>
@@ -211,6 +219,22 @@
     <p id="order-value"></p>
     <p id="order-error" class="negative"></p>
     <button id="place-order" class="primary">Place paper order</button>
+  </dialog>
+
+  <dialog id="shortcuts-dialog" class="glass-dialog">
+    <div class="dialog-header"><h2>Keyboard shortcuts</h2><button data-close="shortcuts-dialog" class="icon-btn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button></div>
+    <div class="shortcut-grid">
+      <span>Command palette</span><span><kbd>⌘</kbd>/<kbd>Ctrl</kbd> + <kbd>K</kbd> or <kbd>/</kbd></span>
+      <span>Timeframes 1–5</span><span><kbd>1</kbd> … <kbd>5</kbd></span>
+      <span>Buy / Sell ticket</span><span><kbd>B</kbd> / <kbd>S</kbd></span>
+      <span>Crosshair / trend / line</span><span><kbd>C</kbd> / <kbd>T</kbd> / <kbd>H</kbd></span>
+      <span>Log scale / auto / reset</span><span><kbd>L</kbd> / <kbd>A</kbd> / <kbd>0</kbd></span>
+      <span>Zoom chart</span><span><kbd>+</kbd> / <kbd>−</kbd> or pinch</span>
+      <span>Pan chart</span><span><kbd>←</kbd> <kbd>→</kbd> or drag</span>
+    </div>
+    <p class="muted dialog-note">Shortcuts pause while you are typing in a field.</p>
   </dialog>
 
   <div id="toast" role="status"></div>
