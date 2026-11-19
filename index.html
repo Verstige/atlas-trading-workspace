@@ -1,1 +1,239 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas — Market workspace</title><link rel="stylesheet" href="/style.css"></head><body><header><a class="brand" href="#">A<span>ATLAS</span></a><span class="workspace">Market workspace <span class="muted">/</span> Overview</span><span class="demo">● SIMULATED MARKET</span><button id="theme" title="Change theme">◐</button><button id="save">Save layout</button><span class="avatar">AT</span></header><main><nav class="tools" aria-label="Drawing tools"><button data-tool="cross" class="active" title="Crosshair">＋</button><button data-tool="line" title="Trend line: click two chart points">╱</button><button data-tool="horizontal" title="Horizontal line">―</button><button data-tool="clear" title="Clear drawings">⌫</button><div class="tool-spacer"></div><button id="download" title="Download chart image">⇩</button></nav><section class="workspace-main"><div class="toolbar"><button id="symbol" class="symbol-button">⌕ <strong>BTCUSD</strong></button><span class="divider"></span><div id="timeframes"><button data-tf="15m">15m</button><button data-tf="1h">1h</button><button data-tf="4h" class="active">4h</button><button data-tf="1D">D</button><button data-tf="1W">W</button></div><span class="divider"></span><select id="charttype" aria-label="Chart type"><option value="candles">▥ Candles</option><option value="line">⌁ Line</option><option value="area">◿ Area</option></select><button id="indicators">ƒ Indicators</button><button id="reset" class="right">↶ Reset view</button></div><section class="chart-panel"><div class="chart-heading"><div><h1 id="market-title">Bitcoin / U.S. Dollar <span>· 4h · ATLAS</span></h1><div class="ohlc" id="ohlc"></div></div><div class="quote-buttons"><button id="sell" class="sell"><small>SELL</small><b></b></button><span class="spread">2.00</span><button id="buy" class="buy"><small>BUY</small><b></b></button></div></div><div class="legend"><span id="sma-label">SMA 20 <b></b></span><span class="muted">Volume</span></div><div class="canvas-wrap"><canvas id="chart" tabindex="0" aria-label="Interactive simulated price chart. Scroll to zoom, drag to pan; arrow keys pan, plus and minus zoom."></canvas><div class="watermark">ATLAS<span>See the bigger picture.</span></div><div id="tooltip"></div></div><footer class="chart-footer"><div id="ranges"><button data-range="30">1M</button><button data-range="90">3M</button><button data-range="160" class="active">6M</button><button data-range="260">1Y</button><button data-range="400">All</button></div><span>UTC <span id="clock"></span></span><button id="log">log</button><button id="auto" class="active">auto</button></footer></section><section class="bottom-panel"><div class="tabs"><button data-tab="positions" class="active">Paper trading <span class="badge">DEMO</span></button><button data-tab="history">Order history</button><span class="right muted">Practice account</span><strong id="balance">$100,000.00</strong></div><div id="positions"></div></section><footer class="status"><span><i></i> Workspace connected</span><span>All prices are simulated · No real orders</span><span class="right">Atlas Terminal / 01</span></footer></section><aside><div class="aside-title"><h2>Watchlist</h2><button id="add-symbol" title="Add symbol">＋</button></div><div class="watch-head"><span>Symbol</span><span>Last</span><span>Chg%</span></div><div id="watchlist"></div><div class="aside-section"><span class="eyebrow">MARKET OVERVIEW</span><h2 id="detail-name">Bitcoin</h2><span id="detail-exchange" class="muted">BTCUSD · Crypto</span><div id="detail-price"></div><div id="detail-change" class="positive"></div><div class="market-open"><i></i> Simulated session</div><hr><div class="stat"><span>Day range</span><b id="day-range"></b></div><div class="range-track"><span></span></div><div class="stat"><span>Volume</span><b id="volume"></b></div><div class="stat"><span>Asset class</span><b id="asset-class"></b></div></div><div class="insight"><span class="eyebrow">YOUR MARKET, IN FOCUS</span><h3>A little perspective.<br>A better decision.</h3><p>Explore price action, compare markets, and test your ideas in a practice account.</p><span>Research. Refine. Repeat. ↗</span></div><div class="aside-bottom">✦ Independent workspace</div></aside></main><dialog id="search-dialog"><div class="dialog-header"><h2>Symbol search</h2><button data-close="search-dialog">✕</button></div><input id="search" placeholder="Search symbols or companies…" autocomplete="off"><div id="search-results"></div></dialog><dialog id="indicator-dialog"><div class="dialog-header"><h2>Indicators</h2><button data-close="indicator-dialog">✕</button></div><label><input type="checkbox" id="sma" checked> Simple moving average <span class="muted">20 periods</span></label><label><input type="checkbox" id="volume-toggle" checked> Trading volume</label><p class="muted">Indicators are calculated from simulated chart data.</p></dialog><dialog id="order-dialog"><div class="dialog-header"><h2 id="order-title"></h2><button data-close="order-dialog">✕</button></div><p class="muted">Paper market order · Simulated execution</p><label>Quantity <input id="quantity" type="number" min="0.001" step="0.001" value="1"></label><p id="order-value"></p><p id="order-error" class="negative"></p><button id="place-order" class="primary">Place paper order</button></dialog><div id="toast" role="status"></div><script type="module" src="/app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0A0C11">
+  <title>Atlas — Market workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- Atmosphere: the refracting field that sits behind every glass surface -->
+  <div class="aurora" aria-hidden="true">
+    <span class="orb orb--a"></span>
+    <span class="orb orb--b"></span>
+    <span class="orb orb--c orb--lens"></span>
+    <span class="grain"></span>
+  </div>
+
+  <header class="appbar glass">
+    <a class="brand" href="#" aria-label="Atlas home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19 12 5l8 14"/><path d="M7.4 14h9.2"/>
+        </svg>
+      </span>
+      <span class="brand-name">ATLAS</span>
+    </a>
+
+    <span class="workspace">Market workspace <span class="muted">/</span> <b>Overview</b></span>
+
+    <div class="appbar-right">
+      <span class="demo"><i></i> SIMULATED MARKET</span>
+      <button id="theme" class="icon-btn" title="Switch light / dark theme" aria-label="Switch theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.5 14.3A8.5 8.5 0 0 1 9.7 3.5a8.5 8.5 0 1 0 10.8 10.8Z"/>
+        </svg>
+      </button>
+      <button id="save" class="btn-glass">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8V3M8 21v-7h8v7"/></svg>
+        <span>Save layout</span>
+      </button>
+      <span class="avatar" title="Practice account">AT</span>
+    </div>
+  </header>
+
+  <main>
+    <!-- Drawing rail -->
+    <nav class="tools glass" aria-label="Drawing tools">
+      <button data-tool="cross" class="active" title="Crosshair — drag to pan" aria-label="Crosshair">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="6.2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+      </button>
+      <button data-tool="line" title="Trend line — click two points on the chart" aria-label="Trend line">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="18" r="2"/><circle cx="19" cy="6" r="2"/><path d="m6.6 16.6 10.8-9.2"/></svg>
+      </button>
+      <button data-tool="horizontal" title="Horizontal line — click the chart" aria-label="Horizontal line">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 12h18"/><path d="M6 9v6M18 9v6"/></svg>
+      </button>
+      <button data-tool="clear" title="Clear drawings" aria-label="Clear drawings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/><path d="M10 11v5M14 11v5"/></svg>
+      </button>
+      <span class="tool-spacer"></span>
+      <button id="download" title="Download chart image" aria-label="Download chart image">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v3h16v-3"/></svg>
+      </button>
+    </nav>
+
+    <section class="workspace-main">
+      <!-- Chart toolbar -->
+      <div class="toolbar glass">
+        <button id="symbol" class="symbol-button" title="Search symbols">
+          <span class="symbol-glyph" id="symbol-glyph">₿</span>
+          <span class="symbol-copy"><strong>BTCUSD</strong><small>Bitcoin · Crypto</small></span>
+          <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <span class="divider"></span>
+        <div id="timeframes" aria-label="Timeframe">
+          <button data-tf="15m">15m</button><button data-tf="1h">1h</button>
+          <button data-tf="4h" class="active">4h</button><button data-tf="1D">D</button><button data-tf="1W">W</button>
+        </div>
+        <span class="divider"></span>
+        <span class="select-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M4 6h16M4 12h11M4 18h7"/></svg>
+          <select id="charttype" aria-label="Chart type">
+            <option value="candles">Candles</option><option value="line">Line</option><option value="area">Area</option>
+          </select>
+          <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+        </span>
+        <button id="indicators" class="btn-glass">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="2" fill="currentColor" stroke="none"/><circle cx="8" cy="18" r="2" fill="currentColor" stroke="none"/></svg>
+          <span>Indicators</span><span class="count">2</span>
+        </button>
+        <button id="reset" class="icon-btn right" title="Reset view" aria-label="Reset view">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+        </button>
+      </div>
+
+      <!-- Chart pane -->
+      <section class="chart-panel glass glass-edge">
+        <div class="chart-heading">
+          <div class="chart-id">
+            <h1 id="market-title">Bitcoin / U.S. Dollar <span>· 4h · ATLAS</span></h1>
+            <div class="ohlc" id="ohlc"></div>
+          </div>
+          <div class="quote-buttons">
+            <button id="sell" class="sell"><small>SELL</small><b></b></button>
+            <span class="spread">2.00</span>
+            <button id="buy" class="buy"><small>BUY</small><b></b></button>
+          </div>
+        </div>
+        <div class="legend"><span id="sma-label">SMA 20 <b></b></span><span class="muted">Volume</span></div>
+        <div class="canvas-wrap">
+          <canvas id="chart" tabindex="0" aria-label="Interactive simulated price chart. Scroll to zoom, drag to pan; arrow keys pan, plus and minus zoom."></canvas>
+          <div class="watermark">ATLAS<span>See the bigger picture.</span></div>
+          <div id="tooltip"></div>
+        </div>
+        <footer class="chart-footer">
+          <div id="ranges">
+            <button data-range="30">1M</button><button data-range="90">3M</button>
+            <button data-range="160" class="active">6M</button><button data-range="260">1Y</button><button data-range="400">All</button>
+          </div>
+          <div class="footer-right"><span class="clock-label">UTC <span id="clock"></span></span><button id="log">log</button><button id="auto" class="active">auto</button></div>
+        </footer>
+      </section>
+
+      <!-- Paper trading -->
+      <section class="bottom-panel glass">
+        <div class="tabs">
+          <button data-tab="positions" class="active">Paper trading <span class="badge">DEMO</span></button>
+          <button data-tab="history">Order history</button>
+          <span class="tab-spacer"></span>
+          <span class="balance-label muted">Practice balance</span>
+          <strong id="balance">$100,000.00</strong>
+        </div>
+        <div id="positions"></div>
+      </section>
+
+      <footer class="status">
+        <span><i></i> Workspace connected</span>
+        <span>All prices are simulated · No real orders</span>
+        <span class="right">Atlas Terminal / 01</span>
+      </footer>
+    </section>
+
+    <!-- Right rail -->
+    <aside>
+      <section class="watch-panel glass glass-edge">
+        <div class="aside-title"><h2>Watchlist</h2><button id="add-symbol" title="Add symbol" aria-label="Add symbol">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+        </button></div>
+        <div class="watch-head"><span>Symbol</span><span>Last</span><span>Chg%</span></div>
+        <div id="watchlist"></div>
+      </section>
+
+      <section class="aside-section glass">
+        <span class="eyebrow">MARKET OVERVIEW</span>
+        <h2 id="detail-name">Bitcoin</h2>
+        <span id="detail-exchange" class="muted">BTCUSD · Crypto</span>
+        <div class="detail-price-row"><div id="detail-price"></div><div id="detail-change" class="positive"></div></div>
+        <div class="market-open"><i></i> Simulated session</div>
+        <hr>
+        <div class="stat"><span>Day range</span><b id="day-range"></b></div>
+        <div class="range-track"><span></span></div>
+        <div class="stat"><span>Volume</span><b id="volume"></b></div>
+        <div class="stat"><span>Asset class</span><b id="asset-class"></b></div>
+      </section>
+
+      <section class="insight glass">
+        <span class="eyebrow">YOUR MARKET, IN FOCUS</span>
+        <h3>A little perspective.<br>A better decision.</h3>
+        <p>Explore price action, compare markets, and test your ideas in a practice account.</p>
+        <span class="insight-link">Research. Refine. Repeat.
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>
+        </span>
+      </section>
+      <div class="aside-bottom">✦ Independent workspace</div>
+    </aside>
+  </main>
+
+  <dialog id="search-dialog" class="glass-dialog">
+    <div class="dialog-header"><h2>Symbol search</h2><button data-close="search-dialog" class="icon-btn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button></div>
+    <label class="search-field">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input id="search" placeholder="Search symbols or companies…" autocomplete="off" spellcheck="false">
+    </label>
+    <div id="search-results"></div>
+  </dialog>
+
+  <dialog id="indicator-dialog" class="glass-dialog">
+    <div class="dialog-header"><h2>Indicators</h2><button data-close="indicator-dialog" class="icon-btn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button></div>
+    <label class="check-row"><input type="checkbox" id="sma" checked><span class="check-box"></span><span>Simple moving average <small class="muted">20 periods</small></span></label>
+    <label class="check-row"><input type="checkbox" id="volume-toggle" checked><span class="check-box"></span><span>Trading volume</span></label>
+    <p class="muted dialog-note">Indicators are calculated from simulated chart data.</p>
+  </dialog>
+
+  <dialog id="order-dialog" class="glass-dialog">
+    <div class="dialog-header"><h2 id="order-title"></h2><button data-close="order-dialog" class="icon-btn" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button></div>
+    <p class="muted dialog-note">Paper market order · Simulated execution</p>
+    <label class="field-label" for="quantity">Quantity</label>
+    <input id="quantity" type="number" min="0.001" step="0.001" value="1">
+    <p id="order-value"></p>
+    <p id="order-error" class="negative"></p>
+    <button id="place-order" class="primary">Place paper order</button>
+  </dialog>
+
+  <div id="toast" role="status"></div>
+
+  <script type="module" src="/app.js"></script>
+  <script>
+    // Specular highlight: glass responds to pointer position, like Apple's Liquid Glass.
+    (function () {
+      const move = (el, x, y) => { el.style.setProperty('--mx', x + 'px'); el.style.setProperty('--my', y + 'px'); };
+      document.querySelectorAll('.glass, .glass-dialog').forEach(el => {
+        el.addEventListener('pointermove', e => { const r = el.getBoundingClientRect(); move(el, e.clientX - r.left, e.clientY - r.top); }, { passive: true });
+        el.addEventListener('pointerleave', () => move(el, -400, -400));
+      });
+    })();
+
+    // Keep the toolbar monogram in sync with the symbol chosen in app.js.
+    (function () {
+      const glyphs = { BTCUSD:'₿', ETHUSD:'Ξ', AAPL:'A', NVDA:'N', SPX:'S', EURUSD:'€', XAUUSD:'G' };
+      const sym = document.querySelector('#symbol strong');
+      const mark = document.querySelector('#symbol-glyph');
+      if (!sym || !mark) return;
+      new MutationObserver(() => { mark.textContent = glyphs[sym.textContent] || sym.textContent[0]; })
+        .observe(sym, { childList: true, characterData: true, subtree: true });
+    })();
+  </script>
+</body>
+</html>
