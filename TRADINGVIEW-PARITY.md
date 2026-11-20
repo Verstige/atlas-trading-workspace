@@ -40,7 +40,8 @@ To cross that line, the first requirement is a real market data feed. Everything
 
 ### T2 — Drawing and study toolkit
 
-- **Fibonacci retracement and extension — done in this pass.**
+- **Fibonacci retracement and extension — done.** Selectable studies with draggable
+  endpoints, a numeric High/Low editor, undo/redo and persistence.
 - Still missing: Fib fan, Fib channel, parallel channel, ray, rectangle, text, arrows, brush, measure tool.
 - Magnet snapping to candle highs/lows, per-drawing style editor, duplicate/delete, undo/redo history depth beyond the current stack.
 

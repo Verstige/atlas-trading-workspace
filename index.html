@@ -56,6 +56,9 @@
   <main>
     <!-- Drawing rail -->
     <nav class="tools glass" aria-label="Drawing tools">
+      <button data-tool="select" title="Select and edit studies" aria-label="Select and edit studies">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m5 3 13 9-6 1-2 6z"/></svg>
+      </button>
       <button data-tool="cross" class="active" title="Crosshair — drag to pan" aria-label="Crosshair">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="6.2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
       </button>
@@ -137,6 +140,14 @@
           <div class="pane-host" id="pane-host"></div>
           <div class="watermark">ATLAS<span>See the bigger picture.</span></div>
           <div id="tooltip"></div>
+          <div class="drawing-editor" id="drawing-editor" hidden>
+            <div class="de-head"><span id="de-title">Fibonacci study</span><button id="de-close" aria-label="Close editor">×</button></div>
+            <div class="de-row">
+              <label>High <input id="de-high" type="number" step="0.01" inputmode="decimal"></label>
+              <label>Low <input id="de-low" type="number" step="0.01" inputmode="decimal"></label>
+            </div>
+            <div class="de-foot"><button id="de-delete">Delete study</button><span class="muted">Or drag the dots on the chart</span></div>
+          </div>
         </div>
         <footer class="chart-footer">
           <div id="ranges">
@@ -279,6 +290,7 @@
       <span>Pan chart</span><span><kbd>←</kbd> <kbd>→</kbd> or drag</span>
       <span>Export OHLCV</span><span><kbd>E</kbd></span>
       <span>Undo / redo drawing</span><span><kbd>⌘</kbd>/<kbd>Ctrl</kbd> + <kbd>Z</kbd> / <kbd>⇧</kbd><kbd>Z</kbd></span>
+      <span>Select / edit study</span><span><kbd>V</kbd></span>
     </div>
     <p class="muted dialog-note">Shortcuts pause while you are typing in a field.</p>
   </dialog>

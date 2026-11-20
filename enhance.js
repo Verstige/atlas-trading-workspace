@@ -398,6 +398,7 @@ document.addEventListener('keydown', (e) => {
     e: exportCsv,
     l: () => $('#log')?.click(),
     a: () => $('#auto')?.click(),
+    v: () => A.setTool?.('select'),
     '0': () => $('#reset')?.click(),
   }[key] || (TOOLS[key] ? () => $(`[data-tool="${TOOLS[key]}"]`)?.click() : null);
 
@@ -902,6 +903,50 @@ const onResizeBreakpoint = (e) => {
 };
 if (mobileQuery.addEventListener) mobileQuery.addEventListener('change', onResizeBreakpoint);
 else mobileQuery.addListener(onResizeBreakpoint);
+
+/* ================================================================== *
+ * Study editor — numeric High/Low plus selected-state sync
+ * ================================================================== */
+const editor = $('#drawing-editor');
+function syncEditor() {
+  if (!editor || !A) return;
+  const index = A.selected;
+  const drawing = index != null ? A.drawings[index] : null;
+  if (!drawing) { editor.hidden = true; return; }
+  editor.hidden = false;
+  setText('#de-title', drawing.type === 'fib' ? 'Fibonacci retracement'
+    : drawing.type === 'fibext' ? 'Fibonacci extension' : 'Drawing');
+  const end = drawing.b ? drawing.b.p : drawing.a.p;
+  const high = Math.max(drawing.a.p, end);
+  const low = Math.min(drawing.a.p, end);
+  if (document.activeElement !== $('#de-high')) $('#de-high').value = high.toFixed(2);
+  if (document.activeElement !== $('#de-low')) $('#de-low').value = low.toFixed(2);
+}
+setInterval(syncEditor, 200);
+document.addEventListener('atlas:drawingchange', syncEditor);
+
+function applyEditorLevels() {
+  const high = Number($('#de-high').value);
+  const low = Number($('#de-low').value);
+  if (!Number.isFinite(high) || !Number.isFinite(low) || high <= low) {
+    A.toast('High must be above Low.');
+    syncEditor();
+    return;
+  }
+  A.setFibLevels(high, low);
+  syncEditor();
+}
+$('#de-high')?.addEventListener('change', applyEditorLevels);
+$('#de-low')?.addEventListener('change', applyEditorLevels);
+$('#de-close')?.addEventListener('click', () => { A.selectDrawing(null); syncEditor(); });
+$('#de-delete')?.addEventListener('click', () => { A.deleteSelected(); syncEditor(); });
+
+$$('[data-tool]').forEach((button) => {
+  button.addEventListener('click', () => {
+    if (button.dataset.tool !== 'select' && A.selected != null) A.selectDrawing(null);
+  });
+});
+
 
 
 

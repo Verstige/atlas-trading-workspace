@@ -30,6 +30,7 @@ Production: `npm run build`. Functional checks: `node scripts/check.mjs`.
 - Bracket stop-loss / take-profit on market, limit and stop fills.
 - Drawings persist per symbol and timeframe; watchlist is editable with custom symbols.
 - Fibonacci retracement and extension tools with labeled levels, plus drawing undo/redo.
+- Studies auto-select after placement; drag their endpoints or edit High/Low numerically.
 - 1/2/4 synchronized chart layouts, market wire, economic calendar and first-run tour.
 - Four saved accent themes, keyboard focus traps, skip link and an installable offline PWA.
 - `npm run smoke` verifies DOM hooks, PWA assets, syntax and trading math.
