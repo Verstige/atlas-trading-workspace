@@ -29,6 +29,7 @@ Production: `npm run build`. Functional checks: `node scripts/check.mjs`.
 - CSV export of the visible OHLCV series (`E` shortcut).
 - Bracket stop-loss / take-profit on market, limit and stop fills.
 - Drawings persist per symbol and timeframe; watchlist is editable with custom symbols.
+- Fibonacci retracement and extension tools with labeled levels, plus drawing undo/redo.
 - 1/2/4 synchronized chart layouts, market wire, economic calendar and first-run tour.
 - Four saved accent themes, keyboard focus traps, skip link and an installable offline PWA.
 - `npm run smoke` verifies DOM hooks, PWA assets, syntax and trading math.
@@ -36,6 +37,6 @@ Production: `npm run build`. Functional checks: `node scripts/check.mjs`.
 
 ## Design
 
-Liquid Glass material system over TradingView's information architecture — Outfit + JetBrains Mono, one accent, pointer-tracked specular highlights. Research, decisions, and verification are in [`DESIGN.md`](DESIGN.md).
+Liquid Glass material system over TradingView's information architecture — Outfit + JetBrains Mono, one accent, pointer-tracked specular highlights. Research, decisions, and verification are in [`DESIGN.md`](DESIGN.md). The honest gap analysis for replacing TradingView is in [`TRADINGVIEW-PARITY.md`](TRADINGVIEW-PARITY.md).
 
 All prices and executions are simulated. No brokerage connection or real-time data feed is included. This is an independently built interface, not extracted TradingView source. REA analysis was blocked by the available Node 22.16.0 runtime; no REA reconstruction or internal TradingView behavior is claimed.

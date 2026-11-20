@@ -364,6 +364,8 @@ function exportCsv() {
 
 $('#shortcuts')?.addEventListener('click', () => $('#shortcuts-dialog')?.showModal());
 $('#csv')?.addEventListener('click', exportCsv);
+$('#undo')?.addEventListener('click', () => A.undo?.());
+$('#redo')?.addEventListener('click', () => A.redo?.());
 
 const TIMEFRAMES = ['15m', '1h', '4h', '1D', '1W'];
 const TOOLS = { c: 'cross', t: 'line', h: 'horizontal' };
@@ -378,6 +380,11 @@ document.addEventListener('keydown', (e) => {
   if ((e.metaKey || e.ctrlKey) && key === 'k') { e.preventDefault(); openPalette(); return; }
   if (typing) return;
 
+  if ((e.metaKey || e.ctrlKey) && key === 'z') {
+    e.preventDefault();
+    if (e.shiftKey) A.redo?.(); else A.undo?.();
+    return;
+  }
   if (e.key === '/') { e.preventDefault(); openPalette(); return; }
   if (e.key === '?') { e.preventDefault(); $('#shortcuts-dialog')?.showModal(); return; }
   if (/^[1-5]$/.test(e.key)) {
